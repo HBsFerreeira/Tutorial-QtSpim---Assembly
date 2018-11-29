@@ -1,18 +1,45 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+	    .data
 
-# Other files and folders
-.settings/
+mensagem:	.asciiz "Ola, Tudo bem?\nPor favor,Digite um numero\n"
+mensagem1:	.asciiz "\nO sucessor do e numero:\n"
+mensagem2:	.asciiz "\nO antecessor do e numero:\n"
+numero: 	.word 10
+antecessor:	.word 10
+sucessor: 	.word 10
+		
+	    .text
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
+main: addi $v0, $zero, 4		# imprime mensagem
+      la $a0, mensagem
+      syscall
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+      addi $v0, $zero, 5 		# lêr o numero inteiro
+      syscall
+      sw $v0, numero($zero)		# grava numero 
+      addi $t2, $v0, 0			# $t2 = numero que foi lido
+
+
+      addi $t0, $t2, 1		# calcula sucessor
+      sw $t0, sucessor($zero)	# grava sucessor
+
+      addi $v0, $zero, 4		# imprime mensagem 1
+      la $a0, mensagem1
+      syscall
+
+      addi $v0, $zero, 1		# imprime inteiro
+      add $a0, $zero, $t0 		# argumento = sucessor
+      syscall
+
+
+      addi $t1, $t2, -1			# calcula antecessor
+      sw $t1, antecessor($zero)		# grava antecessor
+      addi $v0, $zero, 4		# imprime mensagem 2
+      la $a0, mensagem2
+      syscall
+
+      addi $v0, $zero, 1		# imprime inteiro
+      add $a0, $zero, $t1 		# argumento = sucessor
+      syscall
+
+
+      jr $ra
